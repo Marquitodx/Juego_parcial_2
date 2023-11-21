@@ -1,0 +1,4 @@
+achicar el rectangulo de mi personaje
+crear plataforma movible
+crear enemigo
+como pasar todo el background a una nueva carpeta
