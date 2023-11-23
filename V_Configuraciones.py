@@ -25,10 +25,9 @@ def obtener_rectangulos(principal: pygame.Rect):
     return diccionario
 
 def sonidos():
-    pygame.mixer.music.load(r"Juego_plataforma-main\Recursos\sonidos\sonido-principal.wav")
+    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
     pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.play(-1)
-
 
 
 
@@ -37,51 +36,51 @@ def sonidos():
 ///////////////////////////////////////////////////////////////////////////
 -------------------  P E R S O N A J E  P R I N C I P A L  -------------'''          
 
-personaje_quieto = [pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (1).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (2).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (3).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (4).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (5).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (6).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (7).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (8).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (9).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Idle (10).png")]
+personaje_quieto = [pygame.image.load(r"Jugador\Idle (1).png"),
+                    pygame.image.load(r"Jugador\Idle (2).png"),
+                    pygame.image.load(r"Jugador\Idle (3).png"),
+                    pygame.image.load(r"Jugador\Idle (4).png"),
+                    pygame.image.load(r"Jugador\Idle (5).png"),
+                    pygame.image.load(r"Jugador\Idle (6).png"),
+                    pygame.image.load(r"Jugador\Idle (7).png"),
+                    pygame.image.load(r"Jugador\Idle (8).png"),
+                    pygame.image.load(r"Jugador\Idle (9).png"),
+                    pygame.image.load(r"Jugador\Idle (10).png")]
 
-personaje_corre =  [pygame.image.load(r"Juego_plataforma-main\Jugador\Run (1).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (2).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (3).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (4).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (5).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (6).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (7).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Run (8).png"),]
+personaje_corre =  [pygame.image.load(r"Jugador\Run (1).png"),
+                    pygame.image.load(r"Jugador\Run (2).png"),
+                    pygame.image.load(r"Jugador\Run (3).png"),
+                    pygame.image.load(r"Jugador\Run (4).png"),
+                    pygame.image.load(r"Jugador\Run (5).png"),
+                    pygame.image.load(r"Jugador\Run (6).png"),
+                    pygame.image.load(r"Jugador\Run (7).png"),
+                    pygame.image.load(r"Jugador\Run (8).png"),]
 
-personaje_salta =  [pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (1).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (2).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (3).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (4).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (5).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (6).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (7).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (8).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (9).png"),
-                    pygame.image.load(r"Juego_plataforma-main\Jugador\Jump (10).png")]
+personaje_salta =  [pygame.image.load(r"Jugador\Jump (1).png"),
+                    pygame.image.load(r"Jugador\Jump (2).png"),
+                    pygame.image.load(r"Jugador\Jump (3).png"),
+                    pygame.image.load(r"Jugador\Jump (4).png"),
+                    pygame.image.load(r"Jugador\Jump (5).png"),
+                    pygame.image.load(r"Jugador\Jump (6).png"),
+                    pygame.image.load(r"Jugador\Jump (7).png"),
+                    pygame.image.load(r"Jugador\Jump (8).png"),
+                    pygame.image.load(r"Jugador\Jump (9).png"),
+                    pygame.image.load(r"Jugador\Jump (10).png")]
 
-personaje_dispara = [pygame.image.load(r"Juego_plataforma-main\Jugador\Shoot (1).png"),
-                     pygame.image.load(r"Juego_plataforma-main\Jugador\Shoot (2).png"),
-                     pygame.image.load(r"Juego_plataforma-main\Jugador\Shoot (3).png"),
-                     pygame.image.load(r"Juego_plataforma-main\Jugador\Shoot (4).png")]
+personaje_dispara = [pygame.image.load(r"Jugador\Shoot (1).png"),
+                    pygame.image.load(r"Jugador\Shoot (2).png"),
+                    pygame.image.load(r"Jugador\Shoot (3).png"),
+                    pygame.image.load(r"Jugador\Shoot (4).png")]
 
-personaje_corre_dispara = [pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (1).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (2).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (3).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (4).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (5).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (6).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (7).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (8).png"),
-                           pygame.image.load(r"Juego_plataforma-main\Jugador\RunShoot (9).png"),]
+personaje_corre_dispara = [pygame.image.load(r"Jugador\RunShoot (1).png"),
+                        pygame.image.load(r"Jugador\RunShoot (2).png"),
+                        pygame.image.load(r"Jugador\RunShoot (3).png"),
+                        pygame.image.load(r"Jugador\RunShoot (4).png"),
+                        pygame.image.load(r"Jugador\RunShoot (5).png"),
+                        pygame.image.load(r"Jugador\RunShoot (6).png"),
+                        pygame.image.load(r"Jugador\RunShoot (7).png"),
+                        pygame.image.load(r"Jugador\RunShoot (8).png"),
+                        pygame.image.load(r"Jugador\RunShoot (9).png"),]
 
 
 # ----------------------------------------------------------------------- REVISAR
@@ -104,28 +103,28 @@ personaje_corre_dispara_izquierda = girar_imagenes(personaje_corre_dispara, True
 ///////////////////////////////////////////////////////////////////////////
 -------------------  E N E M I G O S  ----------------------------------'''
 
-enemigo_camina = [pygame.image.load(r"Juego_plataforma-main\enemigo\run 1.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 2.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 3.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 4.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 5.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 6.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 7.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\run 8.png")]
+enemigo_camina = [pygame.image.load(r"enemigo\run 1.png"),
+                pygame.image.load(r"enemigo\run 2.png"),
+                pygame.image.load(r"enemigo\run 3.png"),
+                pygame.image.load(r"enemigo\run 4.png"),
+                pygame.image.load(r"enemigo\run 5.png"),
+                pygame.image.load(r"enemigo\run 6.png"),
+                pygame.image.load(r"enemigo\run 7.png"),
+                pygame.image.load(r"enemigo\run 8.png")]
 
-enemigo_quieto = [pygame.image.load(r"Juego_plataforma-main\enemigo\idle1.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\idle2.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\idle3.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\idle4.png")]
+enemigo_quieto = [pygame.image.load(r"enemigo\idle1.png"),
+                pygame.image.load(r"enemigo\idle2.png"),
+                pygame.image.load(r"enemigo\idle3.png"),
+                pygame.image.load(r"enemigo\idle4.png")]
 
-enemigo_salta = [pygame.image.load(r"Juego_plataforma-main\enemigo\jump 1.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 2.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 3.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 4.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 5.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 6.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 7.png"),
-                pygame.image.load(r"Juego_plataforma-main\enemigo\jump 8.png")]
+enemigo_salta = [pygame.image.load(r"enemigo\jump 1.png"),
+                pygame.image.load(r"enemigo\jump 2.png"),
+                pygame.image.load(r"enemigo\jump 3.png"),
+                pygame.image.load(r"enemigo\jump 4.png"),
+                pygame.image.load(r"enemigo\jump 5.png"),
+                pygame.image.load(r"enemigo\jump 6.png"),
+                pygame.image.load(r"enemigo\jump 7.png"),
+                pygame.image.load(r"enemigo\jump 8.png")]
 
 
 enemigo_camina_izquierda = girar_imagenes(enemigo_camina, True, False)
@@ -138,17 +137,17 @@ enemigo_salta_izquierda  = girar_imagenes(enemigo_salta, True, False)
 ------------------------------------------------------------------------'''
 
 
-lista1_monedas = [pygame.image.load(r"Juego_plataforma-main\monedas\1.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\2.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\3.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\4.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\5.png"),]
+lista1_monedas = [pygame.image.load(r"monedas\1.png"),
+                pygame.image.load(r"monedas\2.png"),
+                pygame.image.load(r"monedas\3.png"),
+                pygame.image.load(r"monedas\4.png"),
+                pygame.image.load(r"monedas\5.png"),]
 
-lista2_monedas = [pygame.image.load(r"Juego_plataforma-main\monedas\6.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\7.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\8.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\9.png"),
-                pygame.image.load(r"Juego_plataforma-main\monedas\10.png"),]
+lista2_monedas = [pygame.image.load(r"monedas\6.png"),
+                pygame.image.load(r"monedas\7.png"),
+                pygame.image.load(r"monedas\8.png"),
+                pygame.image.load(r"monedas\9.png"),
+                pygame.image.load(r"monedas\10.png"),]
 
 
 

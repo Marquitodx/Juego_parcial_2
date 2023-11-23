@@ -7,12 +7,12 @@ class Disparo:
         self.direccion = direccion # para ver de donde y hacia donde va
         self.velocidad = 10  # velocidad a la que se mueve el disparo
 
-        path_disparo = r"Juego_plataforma-main\Recursos\robotfree\png\Objects\Bullet_000.png"
+        path_disparo = r"Recursos\robotfree\png\Objects\Bullet_000.png"
         self.imagen = pygame.image.load(path_disparo)
         self.imagen = pygame.transform.scale(self.imagen, (10,10))
         self.imagen_volteada = pygame.transform.rotate(self.imagen, 90)
 
-        self.sonido_disparo = pygame.mixer.Sound(r"Juego_plataforma-main\Recursos\sonidos\corte.wav")
+        self.sonido_disparo = pygame.mixer.Sound(r"Recursos\sonidos\corte.wav")
 
         self.rectangulo = self.imagen.get_rect()
         self.rectangulo.x = x
