@@ -1,4 +1,5 @@
 import pygame
+import pygame.mixer
 
 def girar_imagenes(lista_original,flip_x,flip_y):
     lista_girada = []
@@ -24,10 +25,45 @@ def obtener_rectangulos(principal: pygame.Rect):
 
     return diccionario
 
-def sonidos():
-    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
-    pygame.mixer.music.set_volume(0.3)
-    pygame.mixer.music.play(-1)
+def reubicar_rectangulos(principal,rectangulos):
+    rectangulos["bottom"].left = principal.left
+    rectangulos["bottom"].top = principal.bottom - 8
+    rectangulos["bottom"].width = principal.width
+    rectangulos["bottom"].height = 10
+    
+    rectangulos["top"].left = principal.left + 9
+    rectangulos["top"].top = principal.top + 5
+    rectangulos["top"].width = principal.width - 12
+    rectangulos["top"].height = 10
+
+    rectangulos["right"].left = principal.right - 14
+    rectangulos["right"].top = principal.top + 5
+    rectangulos["right"].width = 10
+    rectangulos["right"].height = principal.height
+
+    rectangulos["left"].left = principal.left + 3
+    rectangulos["left"].top = principal.top + 5
+    rectangulos["left"].width = 10
+    rectangulos["left"].height = principal.height
+
+
+# def sonidos():
+#     pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
+#     pygame.mixer.music.set_volume(0.3)
+#     pygame.mixer.music.play(-1)
+
+def pintar_lineas(pantalla, personaje, plataformas, enemigos):
+    pygame.draw.rect(pantalla,"blue", personaje.rectangulos["main"], 2)
+    pygame.draw.rect(pantalla,"red", personaje.rectangulos["bottom"], 2)
+    pygame.draw.rect(pantalla,"red", personaje.rectangulos["top"], 2)
+    pygame.draw.rect(pantalla,"red", personaje.rectangulos["right"], 2)
+    pygame.draw.rect(pantalla,"red", personaje.rectangulos["left"], 2)
+
+    for plataforma in plataformas:
+        pygame.draw.rect(pantalla,"magenta",plataforma.rectangulo,3)
+        
+    for enemigo in enemigos:
+        pygame.draw.rect(pantalla,"orange", enemigo.rectangulo_principal, 3)
 
 
 

@@ -12,7 +12,7 @@ class Disparo:
         self.imagen = pygame.transform.scale(self.imagen, (10,10))
         self.imagen_volteada = pygame.transform.rotate(self.imagen, 90)
 
-        self.sonido_disparo = pygame.mixer.Sound(r"Recursos\sonidos\corte.wav")
+#        self.sonido_disparo = pygame.mixer.Sound(r"Recursos\sonidos\corte.wav")
 
         self.rectangulo = self.imagen.get_rect()
         self.rectangulo.x = x
@@ -34,23 +34,27 @@ class Disparo:
         if self.rectangulo.x < 0 or self.rectangulo.x > ancho:
             self.choco = True
         else:
+            for plataforma in plataformas:
+                if self.rectangulo.colliderect(plataforma.rectangulo):
+                    self.choco = True
             for enemigo in enemigos:
                 if self.rectangulo.colliderect(enemigo.rectangulo_principal):
                     self.choco = True
                     enemigo.vida -= 5
-                    print(enemigo.vida)
+                    print("vida enemigo: ", enemigo.vida)
 
         if self.direccion == 'izquierda':
             pantalla.blit(self.imagen_volteada, self.rectangulo)
         elif self.direccion == 'derecha':
             pantalla.blit(self.imagen, self.rectangulo)
     
-        # flag_disparo = True
-        # ultimo_disparo = 0
 
-        # if flag_disparo:
-        #     tiempo_actual = pygame.time.get_ticks()
-        #     if tiempo_actual - ultimo_disparo >= 1000:
-        #         self.disparar()
-        #         flag_disparo = False
-        #         ultimo_disparo = tiempo_actual
+# flag_disparo = True
+# ultimo_disparo = 0
+
+# if flag_disparo:
+#     tiempo_actual = pygame.time.get_ticks()
+#     if tiempo_actual - ultimo_disparo >= 1000:
+#         self.mover()
+#         flag_disparo = False
+#         ultimo_disparo = tiempo_actual
