@@ -56,9 +56,9 @@ class Personaje:
                 for lado in self.rectangulos:
                     self.rectangulos[lado].x += velocidad_actual
                     
-                    for piso in plataformas:
-                        if self.rectangulos["right"].colliderect(piso.rectangulos["left"]):
-                            self.avanzar = False
+                    # for piso in plataformas:
+                    #     if self.rectangulos["right"].colliderect(piso.rectangulos["left"]):
+                    #         self.avanzar = False
 
 
     def animar(self, pantalla):
@@ -184,6 +184,7 @@ class Personaje:
                 i -= 1
             i += 1
 
+
     def aplicar_gravedad(self, pantalla, plataformas):
         
         velocidad_salto = self.desplazamiento_y
@@ -211,7 +212,6 @@ class Personaje:
             
             else:
                 self.esta_saltando = True
-
 
 
     def detectar_colision(self, enemigos, height):
@@ -244,13 +244,14 @@ class Personaje:
             y = self.rectangulos["main"].centery
         
         nuevo_disparo = Disparo(x, y, self.direccion)
-        nuevo_disparo.sonido_disparo.play()
+#        nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)
 
         for enemigo in enemigos:
             if nuevo_disparo.rectangulo.colliderect(enemigo.rectangulo_principal):
                 self.puntaje += 1
                 print("Puntaje: ", self.puntaje)
+
 
     def actualizar_disparo(self, enemigos):
         flag_disparo = True

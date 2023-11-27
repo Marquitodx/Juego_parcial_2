@@ -47,10 +47,10 @@ def reubicar_rectangulos(principal,rectangulos):
     rectangulos["left"].height = principal.height
 
 
-def sonidos():
-    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
-    pygame.mixer.music.set_volume(0.3)
-    pygame.mixer.music.play(-1)
+# def sonidos():
+#     pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
+#     pygame.mixer.music.set_volume(0.3)
+#     pygame.mixer.music.play(-1)
 
 
 def pintar_lineas(pantalla, personaje, plataformas, enemigos):
@@ -76,10 +76,7 @@ def pintar_lineas(pantalla, personaje, plataformas, enemigos):
 
 
 
-'''------------------------------------------------------------------------
-///////////////////////////////////////////////////////////////////////////
--------------------  P E R S O N A J E  P R I N C I P A L  -------------'''          
-
+'''-------------------  P E R S O N A J E  P R I N C I P A L  -------------'''          
 personaje_quieto = [pygame.image.load(r"Jugador\Idle (1).png"),
                     pygame.image.load(r"Jugador\Idle (2).png"),
                     pygame.image.load(r"Jugador\Idle (3).png"),
@@ -133,17 +130,10 @@ personaje_salta_izquierda  = girar_imagenes(personaje_salta, True, False)
 personaje_dispara_izquierda = girar_imagenes(personaje_dispara, True, False)
 personaje_corre_dispara_izquierda = girar_imagenes(personaje_corre_dispara, True, False)
 
-'''------------------------------------------------------------------------
-///////////////////////////////////////////////////////////////////////////
-------------------------------------------------------------------------'''
 
 
 
-
-'''------------------------------------------------------------------------
-///////////////////////////////////////////////////////////////////////////
--------------------  E N E M I G O S  ----------------------------------'''
-
+'''-------------------  E N E M I G O S  ----------------------------------'''
 enemigo_camina = [pygame.image.load(r"enemigo\run 1.png"),
                 pygame.image.load(r"enemigo\run 2.png"),
                 pygame.image.load(r"enemigo\run 3.png"),
@@ -172,13 +162,10 @@ enemigo_camina_izquierda = girar_imagenes(enemigo_camina, True, False)
 enemigo_quieto_izquierda = girar_imagenes(enemigo_quieto, True, False)
 enemigo_salta_izquierda  = girar_imagenes(enemigo_salta, True, False)
 
-'''------------------------------------------------------------------------
-///////////////////////////////////////////////////////////////////////////
-------------------------------------------------------------------------'''
+
 
 def reescalar_imagen(imagen, nuevo_ancho, nuevo_alto):
     return pygame.transform.scale(imagen, (nuevo_ancho, nuevo_alto))
-
 
 def reescalar_lista_imagenes(lista_imagenes, nuevo_ancho, nuevo_alto):
     imagenes_reescaladas = []

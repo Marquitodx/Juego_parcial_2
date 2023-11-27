@@ -12,7 +12,7 @@ class Disparo:
         self.imagen = pygame.transform.scale(self.imagen, (10,10))
         self.imagen_volteada = pygame.transform.rotate(self.imagen, 90)
 
-        self.sonido_disparo = pygame.mixer.Sound(r"Recursos\sonidos\corte.wav")
+        #self.sonido_disparo = pygame.mixer.Sound(r"Recursos\sonidos\corte.wav")
 
         self.rectangulo = self.imagen.get_rect()
         self.rectangulo.x = x
