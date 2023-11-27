@@ -47,10 +47,11 @@ def reubicar_rectangulos(principal,rectangulos):
     rectangulos["left"].height = principal.height
 
 
-# def sonidos():
-#     pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
-#     pygame.mixer.music.set_volume(0.3)
-#     pygame.mixer.music.play(-1)
+def sonidos():
+    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+
 
 def pintar_lineas(pantalla, personaje, plataformas, enemigos):
     pygame.draw.rect(pantalla,"blue", personaje.rectangulos["main"], 2)
@@ -58,9 +59,16 @@ def pintar_lineas(pantalla, personaje, plataformas, enemigos):
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["top"], 2)
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["right"], 2)
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["left"], 2)
+    
+    
 
     for plataforma in plataformas:
-        pygame.draw.rect(pantalla,"magenta",plataforma.rectangulo,3)
+        pygame.draw.rect(pantalla,"pink",plataforma.rectangulos["main"], 2)
+        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["bottom"], 2)
+        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["top"], 2)
+        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["right"], 2)
+        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["left"], 2)
+        
         
     for enemigo in enemigos:
         pygame.draw.rect(pantalla,"orange", enemigo.rectangulo_principal, 3)
@@ -119,14 +127,11 @@ personaje_corre_dispara = [pygame.image.load(r"Jugador\RunShoot (1).png"),
                         pygame.image.load(r"Jugador\RunShoot (9).png"),]
 
 
-# ----------------------------------------------------------------------- REVISAR
 personaje_camina_izquierda = girar_imagenes(personaje_corre, True, False)
 personaje_quieto_izquierda = girar_imagenes(personaje_quieto, True, False)
 personaje_salta_izquierda  = girar_imagenes(personaje_salta, True, False)
 personaje_dispara_izquierda = girar_imagenes(personaje_dispara, True, False)
 personaje_corre_dispara_izquierda = girar_imagenes(personaje_corre_dispara, True, False)
-# -----------------------------------------------------------------------
-
 
 '''------------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////
@@ -167,23 +172,35 @@ enemigo_camina_izquierda = girar_imagenes(enemigo_camina, True, False)
 enemigo_quieto_izquierda = girar_imagenes(enemigo_quieto, True, False)
 enemigo_salta_izquierda  = girar_imagenes(enemigo_salta, True, False)
 
-
 '''------------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////
 ------------------------------------------------------------------------'''
 
+def reescalar_imagen(imagen, nuevo_ancho, nuevo_alto):
+    return pygame.transform.scale(imagen, (nuevo_ancho, nuevo_alto))
+
+
+def reescalar_lista_imagenes(lista_imagenes, nuevo_ancho, nuevo_alto):
+    imagenes_reescaladas = []
+    for imagen in lista_imagenes:
+        imagenes_reescaladas.append(reescalar_imagen(imagen, nuevo_ancho, nuevo_alto))
+    return imagenes_reescaladas
 
 lista1_monedas = [pygame.image.load(r"monedas\1.png"),
                 pygame.image.load(r"monedas\2.png"),
                 pygame.image.load(r"monedas\3.png"),
                 pygame.image.load(r"monedas\4.png"),
                 pygame.image.load(r"monedas\5.png"),]
+primera_lista_monedas = reescalar_lista_imagenes(lista1_monedas, 20, 20)
 
 lista2_monedas = [pygame.image.load(r"monedas\6.png"),
                 pygame.image.load(r"monedas\7.png"),
                 pygame.image.load(r"monedas\8.png"),
                 pygame.image.load(r"monedas\9.png"),
                 pygame.image.load(r"monedas\10.png"),]
+segunda_lista_monedas = reescalar_lista_imagenes(lista2_monedas, 20, 20)
+
+
 
 
 

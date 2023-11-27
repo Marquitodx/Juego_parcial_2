@@ -16,6 +16,7 @@ class Plataforma:
         self.rectangulo.x = x
         self.rectangulo.y = y
         self.premio = tiene_premio
+        self.rectangulos = obtener_rectangulos(self.rectangulo)
 
 
 

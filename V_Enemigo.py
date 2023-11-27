@@ -1,5 +1,6 @@
 import pygame, random
 from V_Configuraciones import *
+from V_Plataformas import *
 
 
 class Enemigo:
@@ -17,22 +18,22 @@ class Enemigo:
         
         self.vida = 20
         self.esta_muerto = False
-        self.esta_muriendo = False
 
     
     def avanzar(self):
-        if self.direccion == "izquierda":
-            self.animacion_actual = self.animaciones["Izquierda"]
-            self.rectangulo_principal.x -= 5
-            if self.rectangulo_principal.left <= self.limite1:
-                self.rectangulo_principal.x = self.limite1
-                self.direccion = "derecha"
-        elif self.direccion == "derecha":
-            self.animacion_actual = self.animaciones["Derecha"]
-            self.rectangulo_principal.x += 5
-            if self.rectangulo_principal.right >= self.limite2:
-                self.rectangulo_principal.x = self.limite2 - self.rectangulo_principal.width
-                self.direccion = "izquierda"
+        if not self.esta_muerto:
+            if self.direccion == "izquierda":
+                self.animacion_actual = self.animaciones["Izquierda"]
+                self.rectangulo_principal.x -= 5
+                if self.rectangulo_principal.left <= self.limite1:
+                    self.rectangulo_principal.x = self.limite1
+                    self.direccion = "derecha"
+            elif self.direccion == "derecha":
+                self.animacion_actual = self.animaciones["Derecha"]
+                self.rectangulo_principal.x += 5
+                if self.rectangulo_principal.right >= self.limite2:
+                    self.rectangulo_principal.x = self.limite2 - self.rectangulo_principal.width
+                    self.direccion = "izquierda"
 
 
     def animar(self, pantalla):
@@ -42,16 +43,15 @@ class Enemigo:
         pantalla.blit(self.animacion_actual[self.contador_pasos], self.rectangulo_principal)
         self.contador_pasos +=1
         
-        if self.esta_muriendo and self.contador_pasos == largo:
+        if self.esta_muerto and self.contador_pasos == largo:
             self.esta_muerto = True
 
 
     def actualizar(self, pantalla, lista_enemigos):
-        if not self.esta_muerto and not self.esta_muriendo:
+        if not self.esta_muerto:
             self.animar(pantalla)
             self.avanzar()
         if self.vida <= 0:
-            self.esta_muriendo = True
             self.esta_muerto = True
             lista_enemigos.remove(self)
     
@@ -90,18 +90,6 @@ class Enemigo:
         random.shuffle(lista)  # Aleatoriza la lista de enemigos
 
         return lista
-
-'''
-
-al enemigo darle un indice
-
-for enemigo in lista_coordenadas:
-    blitear enemigo
-
-    eliminar posicion ya elegida
-una lista de coordenadas y aleatoriamente agarro una de esas
-
-'''
 
 
 

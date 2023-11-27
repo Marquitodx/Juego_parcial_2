@@ -35,14 +35,15 @@ class Personaje:
 
     # ------  SALTO  -------
         self.desplazamiento_y = 0 
-        self.potencia_salto = -17
-        self.limite_velocidad_salto = 17 
+        self.potencia_salto = -15
+        self.limite_velocidad_salto = 15 
         self.esta_saltando = True
         self.gravedad = 1 
 
     # ------  DISPAROS  -------
         self.esta_disparando = False
         self.lista_disparos = []
+        self.avanzar = True
     
 
     def caminar(self, pantalla, plataformas):
@@ -51,9 +52,13 @@ class Personaje:
             velocidad_actual *= -1
             
         nueva_posicion = self.rectangulos["main"].x + velocidad_actual
-        if 0 <= nueva_posicion <= (pantalla.get_width() - self.rectangulos["main"].width):
+        if 0 <= nueva_posicion <= (pantalla.get_width() - self.rectangulos["main"].width) and self.avanzar:
                 for lado in self.rectangulos:
                     self.rectangulos[lado].x += velocidad_actual
+                    
+                    for piso in plataformas:
+                        if self.rectangulos["right"].colliderect(piso.rectangulos["left"]):
+                            self.avanzar = False
 
 
     def animar(self, pantalla):
@@ -76,58 +81,55 @@ class Personaje:
                 self.animacion_actual = self.animaciones["SaltaIzq"]
 
 
-    def actualizar(self,evento_tiempo,pantalla, plataformas, enemigos):
+    def actualizar(self, pantalla, plataformas, enemigos):
+        
+        TECLA_DERECHA = pygame.K_RIGHT
+        TECLA_IZQUIERDA = pygame.K_LEFT
+        TECLA_ESPACIO = pygame.K_SPACE
+        TECLA_F = pygame.K_f
         
         keys = pygame.key.get_pressed()
-       
-        for evento in pygame.event.get():
-            if evento.type == evento_tiempo:
-                self.disparo = True
 
-# --- camina a la derecha
-        if keys[pygame.K_RIGHT]:
-            if keys[pygame.K_f] and self.disparo:
+        # --- camina a la derecha
+        if keys[TECLA_DERECHA]:
+            if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaDer"
-                self.disparar(enemigos)
-                self.disparo = False
+                self.actualizar_disparo(enemigos)
             else:
                 self.que_hace = "Derecha"
             self.direccion = "derecha"
 
-# --- camina a la izquierda
-        elif keys[pygame.K_LEFT]:
-            if keys[pygame.K_f] and self.disparo:
+        # --- camina a la izquierda
+        elif keys[TECLA_IZQUIERDA]:
+            if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaIzq"
-                self.disparar(enemigos)
-                self.disparo = False
+                self.actualizar_disparo(enemigos)
             else:
                 self.que_hace = "Izquierda"
             self.direccion = "izquierda"
 
-# --- salta
-        elif keys[pygame.K_SPACE]:
+        # --- salta
+        elif keys[TECLA_ESPACIO]:
             self.saltar()
 
-# --- dispara quieto
-        elif keys[pygame.K_f] and self.disparo:
+        # --- dispara quieto
+        elif keys[TECLA_F]:
             if self.direccion == "derecha":
                 self.que_hace = "DisparaDer"
-                self.disparar(enemigos)
+                self.actualizar_disparo(enemigos)
             elif self.direccion == "izquierda":
                 self.que_hace = "DisparaIzq"
-                self.disparar(enemigos)
+                self.actualizar_disparo(enemigos)
 
-            self.disparo = False
 
-# --- esta quieto izquierda
+        # --- esta quieto izquierda
         elif self.direccion == "izquierda":
             self.que_hace = "QuietoIzq"
 
-# --- esta quieto derecha
+        # --- esta quieto derecha
         elif self.direccion == "derecha":
                 self.que_hace = "Quieto"
 
-# Si esta quieto y la direccion es izquierda, que quede para la izquierda y viceversa
 
         match self.que_hace:
 
@@ -182,7 +184,6 @@ class Personaje:
                 i -= 1
             i += 1
 
-# acomodar <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     def aplicar_gravedad(self, pantalla, plataformas):
         
         velocidad_salto = self.desplazamiento_y
@@ -204,13 +205,13 @@ class Personaje:
                 #self.rectangulos = obtener_rectangulos(self.rectangulo_principal)
                 reubicar_rectangulos(self.rectangulo_principal,self.rectangulos)
                 break
-            elif self.rectangulos["top"].colliderect(piso.rectangulo):
+            
+            elif self.rectangulos["top"].colliderect(piso.rectangulos["bottom"]):
                 self.desplazamiento_y *= -1
+            
             else:
                 self.esta_saltando = True
-        
-        
-            # Crear una bandera para que los cuadrados no puedan irse de los margenes del principal
+
 
 
     def detectar_colision(self, enemigos, height):
@@ -234,7 +235,6 @@ class Personaje:
         self.rectangulos = obtener_rectangulos(self.rectangulo_principal)
 
 
-# agregar lapso de disparo <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     def disparar(self, enemigos):
         if self.direccion == "derecha":
             x = self.rectangulos["main"].x + 35
@@ -244,7 +244,7 @@ class Personaje:
             y = self.rectangulos["main"].centery
         
         nuevo_disparo = Disparo(x, y, self.direccion)
-#        nuevo_disparo.sonido_disparo.play()
+        nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)
 
         for enemigo in enemigos:
@@ -252,13 +252,13 @@ class Personaje:
                 self.puntaje += 1
                 print("Puntaje: ", self.puntaje)
 
+    def actualizar_disparo(self, enemigos):
+        flag_disparo = True
+        ultimo_disparo = 0
 
-        # flag_disparo = True
-        # ultimo_disparo = 0
-
-        # if flag_disparo:
-        #     tiempo_actual = pygame.time.get_ticks()
-        #     if tiempo_actual - ultimo_disparo >= 1000:
-        #         self.disparar()
-        #         flag_disparo = False
-        #         ultimo_disparo = tiempo_actual
+        if flag_disparo:
+            tiempo_actual = pygame.time.get_ticks()
+            if tiempo_actual - ultimo_disparo >= 1000:
+                self.disparar(enemigos)
+                flag_disparo = False
+                ultimo_disparo = tiempo_actual
