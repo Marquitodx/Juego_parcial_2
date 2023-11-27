@@ -1,3 +1,5 @@
-# Juego_plataforma
+# Pendientes:
 
-Es un juego en desarrollo, acepto comentarios para mejorar
+- manejo de tiempo
+- puntaje
+- menu (botones)
