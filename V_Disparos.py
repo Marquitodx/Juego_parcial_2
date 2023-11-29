@@ -3,12 +3,10 @@ import pygame
 # disparar cada 1000 milis
 
 class Disparo:
-    def __init__(self, x, y, direccion):
+    def __init__(self, x, y, direccion, path):
         self.direccion = direccion # para ver de donde y hacia donde va
         self.velocidad = 10  # velocidad a la que se mueve el disparo
-
-        path_disparo = r"Recursos\robotfree\png\Objects\Bullet_000.png"
-        self.imagen = pygame.image.load(path_disparo)
+        self.imagen = pygame.image.load(path)
         self.imagen = pygame.transform.scale(self.imagen, (10,10))
         self.imagen_volteada = pygame.transform.rotate(self.imagen, 90)
 
@@ -27,7 +25,7 @@ class Disparo:
             self.rectangulo.x += self.velocidad
 
 
-    def actualizar(self, pantalla, enemigos, plataformas):
+    def actualizar(self, pantalla, enemigos, plataformas, jugador):
         self.mover()
 
         ancho = pantalla.get_width()
@@ -41,20 +39,9 @@ class Disparo:
                 if self.rectangulo.colliderect(enemigo.rectangulo_principal):
                     self.choco = True
                     enemigo.vida -= 5
-                    print("vida enemigo: ", enemigo.vida)
+                    jugador.puntaje += 1
 
         if self.direccion == 'izquierda':
             pantalla.blit(self.imagen_volteada, self.rectangulo)
         elif self.direccion == 'derecha':
             pantalla.blit(self.imagen, self.rectangulo)
-    
-
-# flag_disparo = True
-# ultimo_disparo = 0
-
-# if flag_disparo:
-#     tiempo_actual = pygame.time.get_ticks()
-#     if tiempo_actual - ultimo_disparo >= 1000:
-#         self.mover()
-#         flag_disparo = False
-#         ultimo_disparo = tiempo_actual

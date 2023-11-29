@@ -12,14 +12,9 @@ ANCHO, ALTO, FPS = 1280, 720, 20
 VELOCIDAD_FONDO = 3
 
 '''
-Las listas de cosas que creo las tengo que tener en un archivo separado, no en donde creo la clase.
-Porque si quiero agregar algo a una lista, o eliminarlo, es mas facil hacerlo desde el otro archivo.
-
 Guardar pùntajes en una base de datos
 
 Trampas (descuenta vida)
-
-Proyectiles enemigos
 
 Item para vida
 
@@ -57,7 +52,7 @@ PANTALLA = pygame.display.set_mode((ANCHO,ALTO)) # en pixeles
 paisaje = pygame.image.load(r"Recursos\paisaje-fondo-01.jpg").convert()
 x = 0
 
-fondo = pygame.image.load(r"bardito\plataforma-01.png").convert_alpha()
+fondo = pygame.image.load(r"bardito\nueva_plataforma-01.png").convert_alpha()
 fondo = pygame.transform.scale(fondo, (ANCHO,ALTO))
 
 pygame.display.set_caption("Robot vs todo")
@@ -65,8 +60,7 @@ pygame.display.set_caption("Robot vs todo")
 icono = pygame.image.load(r"Recursos\icono.png")
 pygame.display.set_icon(icono)
 
-tiempo_creacion_enemigo = pygame.USEREVENT + 1
-pygame.time.set_timer(tiempo_creacion_enemigo, 5000)
+FUENTE = pygame.font.SysFont("Arial", 30)
 
 
 
@@ -79,19 +73,22 @@ vardo = Personaje((70,60), 50, 600, 5)
 
 
 #   ---------------  ENEMIGOS  ---------------
-lista_enemigos = [enemigo1, enemigo2, enemigo3, enemigo4, enemigo5]
+lista_enemigos = lista_de_enemigos
+
+tiempo_creacion_enemigo = pygame.USEREVENT + 1
+pygame.time.set_timer(tiempo_creacion_enemigo, 10000)
 
 
 #   --------------- PLATAFORMAS --------------
-plataformas = [piso, piso2, piso3, piso4, piso5, piso6, piso7, piso8, piso9, piso10]
-plataformas_enemigos = [piso2, piso3, piso4, piso5, piso6, piso7, piso8, piso9, piso10]
+plataformas = plataformas_para_jugador
 
+plataformas_enemigos = plataformas_para_enemigos
 
 
 # ---------------  MONEDAS ---------------
-lista_monedas = [Monedas(primera_lista_monedas, 250, 635, 20),
-                Monedas(primera_lista_monedas, 275, 635, 20),
-                Monedas(primera_lista_monedas, 300, 635, 20)]
+lista_monedas = lista_de_monedas
+
+
 
 
 while True:
@@ -124,22 +121,19 @@ while True:
     # -------- Monedas
     for monedas in lista_monedas:
         monedas.actualizar(PANTALLA)
+        monedas.detectar_colision(vardo, lista_monedas)
     
     # -------- Enemigos    
     for enemigo in lista_enemigos:
-        enemigo.actualizar(PANTALLA, lista_enemigos)
+        enemigo.actualizar(PANTALLA, lista_enemigos, plataformas, vardo)
+        enemigo.detectar_colision(vardo)
 
     # -------- Jugador
-    vardo.actualizar(PANTALLA, plataformas, lista_enemigos)
-    vardo.detectar_colision(lista_enemigos, ALTO)
-
-    # -------- Plataformas
-    # piso_movible.actualizar(PANTALLA)
-    
-
+    vardo.actualizar(PANTALLA, plataformas, lista_enemigos, FUENTE, vardo)
+    vardo.detectar_colision(lista_enemigos, ALTO, lista_monedas)
     
     
-
+    
     if get_mode():
         pintar_lineas(PANTALLA, vardo, plataformas, lista_enemigos)
     

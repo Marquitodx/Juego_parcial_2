@@ -2,6 +2,7 @@ import pygame, random
 from V_Configuraciones import *
 from V_Plataformas import *
 from V_Listas import *
+from V_DisparoEnemigo import *
 
 dic_enemigo = {
     "Quieto": enemigo_quieto,
@@ -28,6 +29,9 @@ class Enemigo:
         
         self.vida = 20
         self.esta_muerto = False
+        
+        self.lista_disparos = []
+        self.disparando = False
 
     
     def avanzar(self):
@@ -36,12 +40,14 @@ class Enemigo:
                 self.animacion_actual = self.animaciones["Izquierda"]
                 self.rectangulo_principal.x -= 5
                 if self.rectangulo_principal.left < self.plataforma.left:
+                    self.disparar()
                     self.rectangulo_principal.x = self.plataforma.left
                     self.direccion = "derecha"
             elif self.direccion == "derecha":
                 self.animacion_actual = self.animaciones["Derecha"]
                 self.rectangulo_principal.x += 5
                 if self.rectangulo_principal.right > self.plataforma.right:
+                    self.disparar()
                     self.rectangulo_principal.x = self.plataforma.right - self.rectangulo_principal.width
                     self.direccion = "izquierda"
 
@@ -57,68 +63,37 @@ class Enemigo:
             self.esta_muerto = True
 
 
-    def actualizar(self, pantalla, lista_enemigos):
+    def actualizar(self, pantalla, lista_enemigos, plataformas, jugador):
         if not self.esta_muerto:
             self.animar(pantalla)
             self.avanzar()
         if self.vida <= 0:
             self.esta_muerto = True
             lista_enemigos.remove(self)
+        
+        i = 0
+        while i < len(self.lista_disparos):
+            self.lista_disparos[i].actualizar(pantalla, plataformas, jugador)
+            if self.lista_disparos[i].choco:
+                del self.lista_disparos[i]
+                i -= 1
+            i += 1
     
-
-
-
-
-
-
-
-
-# class Enemy:
-#     def __init__(self):
-#         # Inicialización de enemigo
-#         self.image = pygame.image.load("ruta_imagen_enemigo.png")
-#         self.rect = self.image.get_rect()
-#         self.rect.x = 500  # Posición inicial en X
-#         self.rect.y = 250  # Posición inicial en Y
-#         # Otras propiedades del enemigo
-
-#     def update(self):
-#         pass
-#         # Lógica de actualización del enemigo
-#         # Por ejemplo, movimiento del enemigo
-
-#     def draw(self, pantalla):
-#         # Dibuja el enemigo en la pantalla
-#         pantalla.blit(self.image, self.rect)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class Enemy:
-#     def __init__(self):
-#         # Inicialización de enemigo
-#         self.image = pygame.image.load("ruta_imagen_enemigo.png")
-#         self.rect = self.image.get_rect()
-#         self.rect.x = 500  # Posición inicial en X
-#         self.rect.y = 250  # Posición inicial en Y
-#         # Otras propiedades del enemigo
-
-#     def update(self):
-#         pass
-#         # Lógica de actualización del enemigo
-#         # Por ejemplo, movimiento del enemigo
-
-#     def draw(self, pantalla):
-#         # Dibuja el enemigo en la pantalla
-#         pantalla.blit(self.image, self.rect)
+    
+    def disparar(self):
+        if self.direccion == "derecha":
+            x = self.rectangulo_principal.x + 35
+            y = self.rectangulo_principal.y + 32
+        elif self.direccion == "izquierda":
+            x = self.rectangulo_principal.centerx - 25
+            y = self.rectangulo_principal.centery
+        
+        nuevo_disparo = Disparo_enemigo(x, y, self.direccion, r"Recursos\proyectil.png")
+        #        nuevo_disparo.sonido_disparo.play()
+        self.lista_disparos.append(nuevo_disparo)
+    
+    def detectar_colision(self, jugador):
+        lista_proyectiles = self.lista_disparos
+        for proyectil in lista_proyectiles:
+            if proyectil.rectangulo.colliderect(jugador.rectangulo_principal):
+                jugador.vida -= 1

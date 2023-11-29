@@ -3,7 +3,6 @@ from V_Configuraciones import *
 
 
 class Plataforma:
-
     def __init__(self, path, ancho, alto, x, y, es_visible):
 
         if es_visible:
@@ -17,16 +16,3 @@ class Plataforma:
         self.rectangulo.y = y
         self.rectangulos = obtener_rectangulos(self.rectangulo)
         self.desplazamiento_y = 5
-
-
-
-    # def movimiento(self):
-    #     self.rectangulo.y -= 5
-    #     if self.rectangulo.height < 683:
-    #         self.rectangulo.y += 5
-    #     else:
-    #         self.rectangulo.y -= 5
-    
-    # def actualizar(self, pantalla):
-    #     pantalla.blit(self.imagen, self.rectangulo)
-    #     self.movimiento()

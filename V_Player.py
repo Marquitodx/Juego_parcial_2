@@ -16,7 +16,7 @@ diccionario_animaciones = {"Quieto": personaje_quieto,
 class Personaje:
     def __init__(self, tamaño, pos_x, pos_y, velocidad):
         self.animaciones = diccionario_animaciones
-        reescalar_imagenes(self.animaciones, 50, 75)
+        reescalar_imagenes(self.animaciones, 50, 70)
         self.rectangulo_principal = self.animaciones["Quieto"][0].get_rect()
         self.rectangulo_principal.x = pos_x
         self.rectangulo_principal.y = pos_y
@@ -30,13 +30,13 @@ class Personaje:
         self.rectangulos = obtener_rectangulos(self.rectangulo_principal)
     
     # ------  VITALIDAD  -------
-        self.vida = 4
+        self.vida = 50
         self.puntaje = 0
 
     # ------  SALTO  -------
         self.desplazamiento_y = 0 
-        self.potencia_salto = -15
-        self.limite_velocidad_salto = 15 
+        self.potencia_salto = -17
+        self.limite_velocidad_salto = 17 
         self.esta_saltando = True
         self.gravedad = 1 
 
@@ -81,12 +81,14 @@ class Personaje:
                 self.animacion_actual = self.animaciones["SaltaIzq"]
 
 
-    def actualizar(self, pantalla, plataformas, enemigos):
+    def actualizar(self, pantalla, plataformas, enemigos, fuente, jugador):
         
         TECLA_DERECHA = pygame.K_RIGHT
         TECLA_IZQUIERDA = pygame.K_LEFT
         TECLA_ESPACIO = pygame.K_SPACE
         TECLA_F = pygame.K_f
+        BLANCO = (255,255,255)
+        NEGRO = (0,0,0)
         
         keys = pygame.key.get_pressed()
 
@@ -94,7 +96,7 @@ class Personaje:
         if keys[TECLA_DERECHA]:
             if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaDer"
-                self.actualizar_disparo(enemigos)
+                self.disparar(enemigos)
             else:
                 self.que_hace = "Derecha"
             self.direccion = "derecha"
@@ -103,7 +105,7 @@ class Personaje:
         elif keys[TECLA_IZQUIERDA]:
             if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaIzq"
-                self.actualizar_disparo(enemigos)
+                self.disparar(enemigos)
             else:
                 self.que_hace = "Izquierda"
             self.direccion = "izquierda"
@@ -116,10 +118,10 @@ class Personaje:
         elif keys[TECLA_F]:
             if self.direccion == "derecha":
                 self.que_hace = "DisparaDer"
-                self.actualizar_disparo(enemigos)
+                self.disparar(enemigos)
             elif self.direccion == "izquierda":
                 self.que_hace = "DisparaIzq"
-                self.actualizar_disparo(enemigos)
+                self.disparar(enemigos)
 
 
         # --- esta quieto izquierda
@@ -178,11 +180,18 @@ class Personaje:
 
         i = 0
         while i < len(self.lista_disparos):
-            self.lista_disparos[i].actualizar(pantalla, enemigos, plataformas)
+            self.lista_disparos[i].actualizar(pantalla, enemigos, plataformas, jugador)
             if self.lista_disparos[i].choco:
                 del self.lista_disparos[i]
                 i -= 1
             i += 1
+        
+        
+        texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, BLANCO, NEGRO)
+        pantalla.blit(texto_puntaje, (10, 10))
+        
+        contador_vida = fuente.render(f"Vida: {self.vida}", True, BLANCO, NEGRO)
+        pantalla.blit(contador_vida, (1000, 10))
 
 
     def aplicar_gravedad(self, pantalla, plataformas):
@@ -214,18 +223,25 @@ class Personaje:
                 self.esta_saltando = True
 
 
-    def detectar_colision(self, enemigos, height):
+    def detectar_colision(self, enemigos, height, lista_monedas):
+        lista_proyectiles = self.lista_disparos
         if self.rectangulo_principal.top > height:
             self.muere()
         for enemigo in enemigos:
             if self.rectangulos["main"].colliderect(enemigo.rectangulo_principal):
                 self.muere()
                 break
+            
+            for proyectil in lista_proyectiles:
+                if proyectil.rectangulo.colliderect(enemigo.rectangulo_principal):
+                    self.puntaje += 1
+        
+        # for moneda in lista_monedas:
+        #     if self.rectangulo_principal.colliderect(moneda.rectangulo):
+        #         self.puntaje += 5
 
 
     def muere(self):
-        vida = self.vida
-        print("¡El personaje ha muerto! ahora le quedan", {vida}, "vidas")
         self.vida -= 1
         self.rectangulo_principal.x = 50
         self.rectangulo_principal.y = 600
@@ -243,23 +259,6 @@ class Personaje:
             x = self.rectangulos["main"].centerx - 25
             y = self.rectangulos["main"].centery
         
-        nuevo_disparo = Disparo(x, y, self.direccion)
-#        nuevo_disparo.sonido_disparo.play()
+        nuevo_disparo = Disparo(x, y, self.direccion, r"Recursos\robotfree\png\Objects\Bullet_000.png")
+        #        nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)
-
-        for enemigo in enemigos:
-            if nuevo_disparo.rectangulo.colliderect(enemigo.rectangulo_principal):
-                self.puntaje += 1
-                print("Puntaje: ", self.puntaje)
-
-
-    def actualizar_disparo(self, enemigos):
-        flag_disparo = True
-        ultimo_disparo = 0
-
-        if flag_disparo:
-            tiempo_actual = pygame.time.get_ticks()
-            if tiempo_actual - ultimo_disparo >= 1000:
-                self.disparar(enemigos)
-                flag_disparo = False
-                ultimo_disparo = tiempo_actual
