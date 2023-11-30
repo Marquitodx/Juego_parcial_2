@@ -1,5 +1,5 @@
 # Pendientes:
 
-- manejo de tiempo
-- puntaje
+- sql
+- niveles
 - menu (botones)
