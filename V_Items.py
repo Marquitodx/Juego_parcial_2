@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 from V_Configuraciones import *
 from V_Plataformas import *
 
@@ -27,17 +27,25 @@ class Monedas:
         if self.rectangulo.colliderect(jugador.rectangulo_principal):
             lista_monedas.remove(self)
             jugador.puntaje += 5
-        
-        
-        
-    # def crear_monedas(self, plataforma, lista_imagenes):
-    #     tira_monedas = []
-    #     largo = plataforma.width
-    #     i = 0
-    #     y = plataforma.y
-    #     x = plataforma.x
-    #     if i <= largo:
-    #         moneda = Monedas(lista_imagenes, x, y, 20)
-    #         tira_monedas.append(moneda)
-    #         x = plataforma.x + 20
-    #         i += 20
+
+
+class Vida:
+    def __init__(self, path, ancho):
+        self.imagen = pygame.image.load(path)
+        self.imagen = pygame.transform.scale(self.imagen, (80, 80))
+        self.rectangulo = self.imagen.get_rect()
+        self.rectangulo.x = random.randint(0, ancho - self.rectangulo.width)
+        self.rectangulo.y = 0
+
+    def animar(self, pantalla):
+        self.rectangulo.y += 5
+        pantalla.blit(self.imagen, self.rectangulo)
+    
+    def detectar_colision(self, jugador, lista_corazones, alto):
+        if self.rectangulo.colliderect(jugador.rectangulo_principal):
+            lista_corazones.remove(self)
+            jugador.vida += 5
+        elif self.rectangulo.y > alto:
+            lista_corazones.remove(self)
+    
+    

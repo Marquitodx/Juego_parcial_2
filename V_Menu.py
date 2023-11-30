@@ -74,19 +74,24 @@ vardo = Personaje((70,60), 50, 600, 5)
 
 #   ---------------  ENEMIGOS  ---------------
 lista_enemigos = lista_de_enemigos
-
 tiempo_creacion_enemigo = pygame.USEREVENT + 1
 pygame.time.set_timer(tiempo_creacion_enemigo, 10000)
 
 
 #   --------------- PLATAFORMAS --------------
 plataformas = plataformas_para_jugador
-
 plataformas_enemigos = plataformas_para_enemigos
 
 
 # ---------------  MONEDAS ---------------
 lista_monedas = lista_de_monedas
+
+
+# ---------------  VIDAS ---------------
+tuerca1 = Vida(r"Recursos\tuerca.png", ANCHO)
+lista_vidas = [tuerca1]
+tiempo_creacion_vida = pygame.USEREVENT + 2
+pygame.time.set_timer(tiempo_creacion_vida, 10000)
 
 
 
@@ -109,6 +114,9 @@ while True:
         elif evento.type == tiempo_creacion_enemigo:
             nuevo_enemigo = Enemigo(piso_nuevo)
             lista_enemigos.append(nuevo_enemigo)
+        elif evento.type == tiempo_creacion_vida:
+            nueva_vida = Vida(r"Recursos\tuerca.png", ANCHO)
+            lista_vidas.append(nueva_vida)
     
     
     x_relativa = x % paisaje.get_rect().width
@@ -131,6 +139,11 @@ while True:
     # -------- Jugador
     vardo.actualizar(PANTALLA, plataformas, lista_enemigos, FUENTE, vardo)
     vardo.detectar_colision(lista_enemigos, ALTO, lista_monedas)
+    
+    # -------- Vidas
+    for vida in lista_vidas:
+        vida.animar(PANTALLA)
+        vida.detectar_colision(vardo, lista_vidas, ALTO)
     
     
     

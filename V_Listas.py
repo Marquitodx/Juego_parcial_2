@@ -5,7 +5,7 @@ from V_Items import *
 from V_Plataformas import *
 from V_Enemigo import Enemigo
 
-# ········· Plataformas ···········
+# ///////////// Plataformas /////////////
 piso = Plataforma("", 159, 10, 0, 679, False)
 piso2 = Plataforma("", 300, 10, 242, 679, False)
 piso3 = Plataforma("", 150, 45, 517, 630, False)
@@ -28,7 +28,7 @@ plataformas_para_enemigos = [piso2, piso3, piso4, piso5,
                             piso6, piso7, piso8, piso9, piso10]
 
 
-# ········· Enemigos ···········
+# ///////// Enemigos /////////
 enemigo1 = Enemigo(piso10.rectangulo)
 enemigo2 = Enemigo(piso4.rectangulo)
 enemigo3 = Enemigo(piso2.rectangulo)
@@ -39,7 +39,9 @@ lista_de_enemigos = [enemigo1, enemigo2, enemigo3, enemigo4, enemigo5]
 
 
 
-# ········· Monedas ···········
+
+# ///////// Monedas /////////
+
 # ----- Bloque 1
 m1 = Monedas(primera_lista_monedas, 97, 161)
 m2 = Monedas(primera_lista_monedas, 127, 161)

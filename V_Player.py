@@ -59,6 +59,7 @@ class Personaje:
                     # for piso in plataformas:
                     #     if self.rectangulos["right"].colliderect(piso.rectangulos["left"]):
                     #         self.avanzar = False
+                    #         break
 
 
     def animar(self, pantalla):
@@ -212,13 +213,17 @@ class Personaje:
                 self.desplazamiento_y = 0
                 self.esta_saltando = False
                 self.rectangulos["main"].bottom = piso.rectangulo.top
-                #self.rectangulos = obtener_rectangulos(self.rectangulo_principal)
                 reubicar_rectangulos(self.rectangulo_principal,self.rectangulos)
                 break
             
             elif self.rectangulos["top"].colliderect(piso.rectangulos["bottom"]):
                 self.desplazamiento_y *= -1
             
+            # elif self.rectangulos["right"].colliderect(piso.rectangulo):
+            #     self.rectangulos["main"].right = piso.rectangulo.left
+            #     self.desplazamiento_y = 0
+            #     self.esta_saltando = False
+
             else:
                 self.esta_saltando = True
 
