@@ -26,19 +26,20 @@ class Monedas:
     def detectar_colision(self, jugador, lista_monedas):
         if self.rectangulo.colliderect(jugador.rectangulo_principal):
             lista_monedas.remove(self)
-            jugador.puntaje += 5
+            jugador.puntaje += 2
 
 
 class Vida:
     def __init__(self, path, ancho):
         self.imagen = pygame.image.load(path)
-        self.imagen = pygame.transform.scale(self.imagen, (80, 80))
+        self.imagen = pygame.transform.scale(self.imagen, (30, 30))
+        self.imagen.set_colorkey((255,255,255))
         self.rectangulo = self.imagen.get_rect()
         self.rectangulo.x = random.randint(0, ancho - self.rectangulo.width)
         self.rectangulo.y = 0
 
     def animar(self, pantalla):
-        self.rectangulo.y += 5
+        self.rectangulo.y += 2
         pantalla.blit(self.imagen, self.rectangulo)
     
     def detectar_colision(self, jugador, lista_corazones, alto):

@@ -15,6 +15,8 @@ class Disparo_enemigo(Disparo):  # Hereda de la clase Disparo
         ancho = pantalla.get_width()
         if self.rectangulo.x < 0 or self.rectangulo.x > ancho:
             self.choco = True
+        elif self.rectangulo.colliderect(jugador.rectangulos["main"]):
+            self.choco = True
         else:
             for plataforma in plataformas:
                 if self.rectangulo.colliderect(plataforma.rectangulo):

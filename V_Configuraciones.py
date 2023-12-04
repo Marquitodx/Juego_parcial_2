@@ -47,13 +47,15 @@ def reubicar_rectangulos(principal,rectangulos):
     rectangulos["left"].height = principal.height
 
 
-# def sonidos():
-#     pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
-#     pygame.mixer.music.set_volume(0.3)
-#     pygame.mixer.music.play(-1)
+def sonidos():
+    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
 
 
-def pintar_lineas(pantalla, personaje, plataformas, enemigos):
+def pintar_lineas(pantalla, personaje, plataformas, enemigos, lista_vidas):
+
+#   Lineas del personaje    
     pygame.draw.rect(pantalla,"blue", personaje.rectangulos["main"], 2)
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["bottom"], 2)
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["top"], 2)
@@ -61,7 +63,7 @@ def pintar_lineas(pantalla, personaje, plataformas, enemigos):
     pygame.draw.rect(pantalla,"red", personaje.rectangulos["left"], 2)
     
     
-
+#   Lineas de plataformas 
     for plataforma in plataformas:
         pygame.draw.rect(pantalla,"pink",plataforma.rectangulos["main"], 2)
         pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["bottom"], 2)
@@ -72,6 +74,9 @@ def pintar_lineas(pantalla, personaje, plataformas, enemigos):
         
     for enemigo in enemigos:
         pygame.draw.rect(pantalla,"orange", enemigo.rectangulo_principal, 3)
+
+    for tuerca in lista_vidas:
+        pygame.draw.rect(pantalla,"blue", tuerca.rectangulo, 2)
 
 
 

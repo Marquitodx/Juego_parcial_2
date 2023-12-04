@@ -88,7 +88,7 @@ class Personaje:
         TECLA_IZQUIERDA = pygame.K_LEFT
         TECLA_ESPACIO = pygame.K_SPACE
         TECLA_F = pygame.K_f
-        BLANCO = (255,255,255)
+        NARANJA = (230, 120, 0)
         NEGRO = (0,0,0)
         
         keys = pygame.key.get_pressed()
@@ -188,12 +188,15 @@ class Personaje:
             i += 1
         
         
-        texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, BLANCO, NEGRO)
+        texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, NEGRO)
+        sombra_texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, NARANJA)
+        pantalla.blit(sombra_texto_puntaje, (13, 13))
         pantalla.blit(texto_puntaje, (10, 10))
         
-        contador_vida = fuente.render(f"Vida: {self.vida}", True, BLANCO, NEGRO)
+        contador_vida = fuente.render(f"Vida: {self.vida}", True, NEGRO)
+        sombra_contador_vida = fuente.render(f"Vida: {self.vida}", True, NARANJA)
+        pantalla.blit(sombra_contador_vida, (1003, 13))
         pantalla.blit(contador_vida, (1000, 10))
-
 
     def aplicar_gravedad(self, pantalla, plataformas):
         
@@ -234,7 +237,7 @@ class Personaje:
             self.muere()
         for enemigo in enemigos:
             if self.rectangulos["main"].colliderect(enemigo.rectangulo_principal):
-                self.muere()
+                self.vida -= 1
                 break
             
             for proyectil in lista_proyectiles:
@@ -247,9 +250,8 @@ class Personaje:
 
 
     def muere(self):
-        self.vida -= 1
         self.rectangulo_principal.x = 50
-        self.rectangulo_principal.y = 600
+        self.rectangulo_principal.y = 590
         self.esta_saltando = False
         self.desplazamiento_y = 0
         self.que_hace = "Quieto"
@@ -265,5 +267,5 @@ class Personaje:
             y = self.rectangulos["main"].centery
         
         nuevo_disparo = Disparo(x, y, self.direccion, r"Recursos\robotfree\png\Objects\Bullet_000.png")
-        #        nuevo_disparo.sonido_disparo.play()
+        nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)

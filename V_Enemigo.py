@@ -89,7 +89,7 @@ class Enemigo:
             y = self.rectangulo_principal.centery
         
         nuevo_disparo = Disparo_enemigo(x, y, self.direccion, r"Recursos\proyectil.png")
-        #        nuevo_disparo.sonido_disparo.play()
+        #nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)
     
     def detectar_colision(self, jugador):

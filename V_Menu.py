@@ -12,15 +12,9 @@ ANCHO, ALTO, FPS = 1280, 720, 20
 VELOCIDAD_FONDO = 3
 
 '''
-Guardar pùntajes en una base de datos
+Guardar puntajes en una base de datos
 
 Trampas (descuenta vida)
-
-Item para vida
-
-Cronometro
-
-Sonido a los enemigos
 
 Segundo nivel (sin piso solo saltar por plataformas)
 
@@ -30,6 +24,11 @@ LAMBDA
 
 ReGex
 
+Boss (nene super poderoso)
+
+Trabajar vida negativa
+
+Colisiones de costado
 
 Ultimo=
 GUI
@@ -44,6 +43,12 @@ pygame.init()
 
 # ---------------  RELOJ  ---------------
 RELOJ = pygame.time.Clock()
+    
+    # ------ Cronómetro
+tiempo_inicial = pygame.time.get_ticks()
+duracion_minutos = 1
+duracion_milisegundos = duracion_minutos * 60 * 1000
+tiempo_transcurrido = 0
 
 
 # ---------------  PANTALLA Y FONDO  ---------------
@@ -52,20 +57,26 @@ PANTALLA = pygame.display.set_mode((ANCHO,ALTO)) # en pixeles
 paisaje = pygame.image.load(r"Recursos\paisaje-fondo-01.jpg").convert()
 x = 0
 
-fondo = pygame.image.load(r"bardito\nueva_plataforma-01.png").convert_alpha()
-fondo = pygame.transform.scale(fondo, (ANCHO,ALTO))
+FONDO = pygame.image.load(r"bardito\nueva_plataforma-01.png").convert_alpha()
+FONDO = pygame.transform.scale(FONDO, (ANCHO,ALTO))
 
 pygame.display.set_caption("Robot vs todo")
 
 icono = pygame.image.load(r"Recursos\icono.png")
 pygame.display.set_icon(icono)
 
-FUENTE = pygame.font.SysFont("Arial", 30)
+FUENTE = pygame.font.Font(r"Recursos\upheaval\upheavtt.ttf", 30)
+NEGRO = (0,0,0)
+BLANCO = (255,255,255)
+NARANJA = (230, 120, 0)
+
+# Trabajar los update con una bandera
+# bandera_termino = False
 
 
 
 # ---------------  MUSICA ---------------
-#sonidos()
+sonidos()
 
 
 # ---------------  PERSONAJE  ---------------
@@ -90,8 +101,6 @@ lista_monedas = lista_de_monedas
 # ---------------  VIDAS ---------------
 tuerca1 = Vida(r"Recursos\tuerca.png", ANCHO)
 lista_vidas = [tuerca1]
-tiempo_creacion_vida = pygame.USEREVENT + 2
-pygame.time.set_timer(tiempo_creacion_vida, 10000)
 
 
 
@@ -114,41 +123,66 @@ while True:
         elif evento.type == tiempo_creacion_enemigo:
             nuevo_enemigo = Enemigo(piso_nuevo)
             lista_enemigos.append(nuevo_enemigo)
-        elif evento.type == tiempo_creacion_vida:
             nueva_vida = Vida(r"Recursos\tuerca.png", ANCHO)
             lista_vidas.append(nueva_vida)
+
     
     
+
+    # ----- Fondo en movimiento
     x_relativa = x % paisaje.get_rect().width
     PANTALLA.blit(paisaje, (x_relativa - paisaje.get_rect().width, 0))
     if x_relativa < ANCHO:
         PANTALLA.blit(paisaje, (x_relativa, 0))
     x -= VELOCIDAD_FONDO
-    PANTALLA.blit(fondo,(0,0))
+    PANTALLA.blit(FONDO,(0,0))
     
+
+
     # -------- Monedas
     for monedas in lista_monedas:
         monedas.actualizar(PANTALLA)
         monedas.detectar_colision(vardo, lista_monedas)
     
+
+
     # -------- Enemigos    
     for enemigo in lista_enemigos:
         enemigo.actualizar(PANTALLA, lista_enemigos, plataformas, vardo)
         enemigo.detectar_colision(vardo)
 
+
+
     # -------- Jugador
     vardo.actualizar(PANTALLA, plataformas, lista_enemigos, FUENTE, vardo)
     vardo.detectar_colision(lista_enemigos, ALTO, lista_monedas)
     
+
+
     # -------- Vidas
     for vida in lista_vidas:
         vida.animar(PANTALLA)
         vida.detectar_colision(vardo, lista_vidas, ALTO)
     
     
-    
+    # ----- Cronometro
+    tiempo_actual = pygame.time.get_ticks()
+    tiempo_transcurrido = tiempo_actual - tiempo_inicial
+    segundos_restantes = max((duracion_milisegundos - tiempo_transcurrido) // 1000, 0)
+    texto = FUENTE.render(f"{segundos_restantes}", True, NEGRO)
+    sombra = FUENTE.render(f"{segundos_restantes}", True, NARANJA)
+
+    if segundos_restantes == 0:
+        mensaje = FUENTE.render("¡Se agotó el tiempo!", True, NEGRO)
+        PANTALLA.blit(mensaje, (ANCHO // 2 - mensaje.get_width() // 2, ALTO // 2 - mensaje.get_height() // 2))
+    else:
+        PANTALLA.blit(sombra, ((ANCHO // 2) + 3, 13))
+        PANTALLA.blit(texto, (ANCHO // 2, 10))
+
+
+    # ----- Mostrar lineas
     if get_mode():
-        pintar_lineas(PANTALLA, vardo, plataformas, lista_enemigos)
+        pintar_lineas(PANTALLA, vardo, plataformas, lista_enemigos, lista_vidas)
     
     pygame.display.flip()
 
