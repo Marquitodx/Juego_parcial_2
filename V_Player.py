@@ -44,6 +44,8 @@ class Personaje:
         self.esta_disparando = False
         self.lista_disparos = []
         self.avanzar = True
+
+        self.sonido_collec = pygame.mixer.Sound(r"Recursos\sonidos\collectcoin.wav")
     
 
     def caminar(self, pantalla, plataformas):

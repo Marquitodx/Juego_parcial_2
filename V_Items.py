@@ -10,6 +10,8 @@ class Monedas:
         self.rectangulo.y = y - 40
         self.contador_imagenes = 0
         self.imagen_actual = lista_imagenes[0]
+
+        
         
         self.puntos = 20
         self.tocada = False
@@ -27,6 +29,8 @@ class Monedas:
         if self.rectangulo.colliderect(jugador.rectangulo_principal):
             lista_monedas.remove(self)
             jugador.puntaje += 2
+            jugador.sonido_collec.play()
+
 
 
 class Vida:

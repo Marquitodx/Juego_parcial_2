@@ -21,6 +21,7 @@ class Disparo_enemigo(Disparo):  # Hereda de la clase Disparo
             for plataforma in plataformas:
                 if self.rectangulo.colliderect(plataforma.rectangulo):
                     self.choco = True
+                    jugador.vida -= 2
 
         if self.direccion == 'izquierda':
             pantalla.blit(self.imagen_volteada, self.rectangulo)

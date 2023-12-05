@@ -13,6 +13,8 @@ VELOCIDAD_FONDO = 3
 
 '''
 Guardar puntajes en una base de datos
+Trabajar los rectangulos para colisiones
+Acomodar el contador de vidas
 
 Trampas (descuenta vida)
 
