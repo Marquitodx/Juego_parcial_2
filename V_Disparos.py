@@ -4,8 +4,8 @@ import pygame
 
 class Disparo:
     def __init__(self, x, y, direccion, path):
-        self.direccion = direccion # para ver de donde y hacia donde va
-        self.velocidad = 10  # velocidad a la que se mueve el disparo
+        self.direccion = direccion  # para ver de donde y hacia donde va
+        self.velocidad = 7          # velocidad a la que se mueve el disparo
         self.imagen = pygame.image.load(path)
         self.imagen = pygame.transform.scale(self.imagen, (10,10))
         self.imagen_volteada = pygame.transform.rotate(self.imagen, 90)

@@ -13,13 +13,14 @@ diccionario_animaciones = {"Quieto": personaje_quieto,
                         "CorreDisparaDer": personaje_corre_dispara,
                         "CorreDisparaIzq": personaje_corre_dispara_izquierda}
 
+
 class Personaje:
-    def __init__(self, tamaño, pos_x, pos_y, velocidad):
+    def __init__(self, tamaño, piso, velocidad):
         self.animaciones = diccionario_animaciones
         reescalar_imagenes(self.animaciones, 50, 70)
         self.rectangulo_principal = self.animaciones["Quieto"][0].get_rect()
-        self.rectangulo_principal.x = pos_x
-        self.rectangulo_principal.y = pos_y
+        self.rectangulo_principal.x = piso.x
+        self.rectangulo_principal.y = piso.y - 75
         self.velocidad = velocidad
         self.contador_pasos = 0
         self.que_hace = "Quieto"
@@ -45,7 +46,8 @@ class Personaje:
         self.lista_disparos = []
         self.avanzar = True
 
-        self.sonido_collec = pygame.mixer.Sound(r"Recursos\sonidos\collectcoin.wav")
+        self.sonido_collec = pygame.mixer.Sound(SONIDO_MONEDA)
+        self.sonido_vida   = pygame.mixer.Sound(SONIDO_VIDA)
     
 
     def caminar(self, pantalla, plataformas):
@@ -69,7 +71,7 @@ class Personaje:
         if self.contador_pasos >= largo:
             self.contador_pasos = 0
         pantalla.blit(self.animacion_actual[self.contador_pasos], self.rectangulo_principal)
-        self.contador_pasos +=1
+        self.contador_pasos += 1
 
 
     def saltar(self):
@@ -84,14 +86,14 @@ class Personaje:
                 self.animacion_actual = self.animaciones["SaltaIzq"]
 
 
-    def actualizar(self, pantalla, plataformas, enemigos, fuente, jugador):
+    def actualizar(self, pantalla, plataformas, enemigos, jugador,
+                    fuente, color_letras, color_fondo, 
+                    superficie_opaca, tiempo_agotado):
         
         TECLA_DERECHA = pygame.K_RIGHT
         TECLA_IZQUIERDA = pygame.K_LEFT
         TECLA_ESPACIO = pygame.K_SPACE
         TECLA_F = pygame.K_f
-        NARANJA = (230, 120, 0)
-        NEGRO = (0,0,0)
         
         keys = pygame.key.get_pressed()
 
@@ -99,7 +101,7 @@ class Personaje:
         if keys[TECLA_DERECHA]:
             if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaDer"
-                self.disparar(enemigos)
+                self.disparar()
             else:
                 self.que_hace = "Derecha"
             self.direccion = "derecha"
@@ -108,7 +110,7 @@ class Personaje:
         elif keys[TECLA_IZQUIERDA]:
             if keys[pygame.K_f]:
                 self.que_hace = "CorreDisparaIzq"
-                self.disparar(enemigos)
+                self.disparar()
             else:
                 self.que_hace = "Izquierda"
             self.direccion = "izquierda"
@@ -121,10 +123,10 @@ class Personaje:
         elif keys[TECLA_F]:
             if self.direccion == "derecha":
                 self.que_hace = "DisparaDer"
-                self.disparar(enemigos)
+                self.disparar()
             elif self.direccion == "izquierda":
                 self.que_hace = "DisparaIzq"
-                self.disparar(enemigos)
+                self.disparar()
 
 
         # --- esta quieto izquierda
@@ -178,6 +180,9 @@ class Personaje:
                 self.animar(pantalla)
                 self.caminar(pantalla, plataformas)
 
+        if self.vida <= 0 or tiempo_agotado:
+            game_over(fuente, color_letras, color_fondo, pantalla, superficie_opaca)
+        
 
         self.aplicar_gravedad(pantalla, plataformas)
 
@@ -188,17 +193,7 @@ class Personaje:
                 del self.lista_disparos[i]
                 i -= 1
             i += 1
-        
-        
-        texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, NEGRO)
-        sombra_texto_puntaje = fuente.render(f"Puntaje: {self.puntaje}", True, NARANJA)
-        pantalla.blit(sombra_texto_puntaje, (13, 13))
-        pantalla.blit(texto_puntaje, (10, 10))
-        
-        contador_vida = fuente.render(f"Vida: {self.vida}", True, NEGRO)
-        sombra_contador_vida = fuente.render(f"Vida: {self.vida}", True, NARANJA)
-        pantalla.blit(sombra_contador_vida, (1003, 13))
-        pantalla.blit(contador_vida, (1000, 10))
+
 
     def aplicar_gravedad(self, pantalla, plataformas):
         
@@ -233,34 +228,31 @@ class Personaje:
                 self.esta_saltando = True
 
 
-    def detectar_colision(self, enemigos, height, lista_monedas):
+    def detectar_colision(self, enemigos, height, plataforma_revive):
         lista_proyectiles = self.lista_disparos
+        
         if self.rectangulo_principal.top > height:
-            self.muere()
+            self.reiniciar(plataforma_revive)
+
         for enemigo in enemigos:
             if self.rectangulos["main"].colliderect(enemigo.rectangulo_principal):
                 self.vida -= 1
-                break
             
             for proyectil in lista_proyectiles:
                 if proyectil.rectangulo.colliderect(enemigo.rectangulo_principal):
                     self.puntaje += 1
         
-        # for moneda in lista_monedas:
-        #     if self.rectangulo_principal.colliderect(moneda.rectangulo):
-        #         self.puntaje += 5
 
-
-    def muere(self):
-        self.rectangulo_principal.x = 50
-        self.rectangulo_principal.y = 590
+    def reiniciar(self, plataforma_revive):
+        self.rectangulo_principal.x = plataforma_revive.x
+        self.rectangulo_principal.y = plataforma_revive.y - 75
         self.esta_saltando = False
         self.desplazamiento_y = 0
         self.que_hace = "Quieto"
         self.rectangulos = obtener_rectangulos(self.rectangulo_principal)
 
 
-    def disparar(self, enemigos):
+    def disparar(self):
         if self.direccion == "derecha":
             x = self.rectangulos["main"].x + 35
             y = self.rectangulos["main"].y + 32
@@ -268,6 +260,6 @@ class Personaje:
             x = self.rectangulos["main"].centerx - 25
             y = self.rectangulos["main"].centery
         
-        nuevo_disparo = Disparo(x, y, self.direccion, r"Recursos\robotfree\png\Objects\Bullet_000.png")
+        nuevo_disparo = Disparo(x, y, self.direccion, PROYECTIL_JUGADOR)
         nuevo_disparo.sonido_disparo.play()
         self.lista_disparos.append(nuevo_disparo)

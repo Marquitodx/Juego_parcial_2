@@ -1,7 +1,18 @@
-import pygame
+import pygame, sys
 import pygame.mixer
 
+
+'''------------------------------------------------------------------------
+   -------------------  F U N C I O N E S  --------------------------------
+   ------------------------------------------------------------------------'''
+
 def girar_imagenes(lista_original,flip_x,flip_y):
+    '''
+    recibe una lista imagenes y 2 booleanos, que representa x e y
+    depende los parametros que le pasemos va a girar la imagen
+
+    devuelve la lista girada para donde quieras
+    '''
     lista_girada = []
     for img in lista_original:
         lista_girada.append(pygame.transform.flip(img, flip_x, flip_y))
@@ -9,19 +20,65 @@ def girar_imagenes(lista_original,flip_x,flip_y):
     return lista_girada
 
 def reescalar_imagenes(diccionario_animaciones, ancho, alto):
+    '''
+    recibe un diccionario de animaciones, alto y ancho.
+    estos dos ultimos representan el tamaño al que queres reescalar.
+    '''
     for clave in diccionario_animaciones:
         for i in range(len(diccionario_animaciones[clave])):
             img = diccionario_animaciones[clave][i]
             diccionario_animaciones[clave][i] = pygame.transform.scale(img, (ancho, alto))
 
 def obtener_rectangulos(principal: pygame.Rect):
+    '''
+    recibe un rectangulo y en base a ese, crea 5 rectangulos "secundarios"
+    que se almacenan en un diccionario
+
+    retorna el diccionario con los 5 rectangulos
+    '''
+    '''diccionario = {
+        "main": principal,
+        "bottom": pygame.Rect(principal.left, 
+                              principal.bottom - 8,
+                              principal.width,
+                              10),
+        "top": pygame.Rect(principal.left + 9,
+                           principal.top + 5,
+                           principal.width - 12,
+                           10),
+        "right": pygame.Rect(principal.right - 14,
+                             principal.top + 5,
+                             10,
+                             principal.height),
+        "left": pygame.Rect(principal.left + 3,
+                            principal.top + 5,
+                            10,
+                            principal.height)
+    }'''
+
     diccionario = {
         "main": principal,
-        "bottom": pygame.Rect(principal.left, principal.bottom - 8, principal.width, 10),
-        "top": pygame.Rect(principal.left + 9, principal.top + 5, principal.width - 12, 10),
-        "right": pygame.Rect(principal.right - 14, principal.top + 5, 10, principal.height),
-        "left": pygame.Rect(principal.left + 3, principal.top + 5, 10, principal.height)
+        "bottom": pygame.Rect(principal.left, 
+                              principal.bottom - 10,
+                              principal.width,
+                              10),
+        "top": pygame.Rect(principal.left,
+                           principal.top,
+                           principal.width,
+                           10),
+        "right": pygame.Rect(principal.right - 10,
+                             principal.top,
+                             10,
+                             principal.height),
+        "left": pygame.Rect(principal.left,
+                            principal.top,
+                            10,
+                            principal.height)
     }
+    diccionario["left"].topleft = diccionario["top"].topleft
+    diccionario["bottom"].bottomright = diccionario["right"].bottomright
+    diccionario["top"].topright = diccionario["right"].topright
+    diccionario["left"].bottomleft = diccionario["bottom"].bottomleft
 
     return diccionario
 
@@ -46,41 +103,91 @@ def reubicar_rectangulos(principal,rectangulos):
     rectangulos["left"].width = 10
     rectangulos["left"].height = principal.height
 
+def reescalar_imagen(imagen, nuevo_ancho, nuevo_alto):
+    return pygame.transform.scale(imagen, (nuevo_ancho, nuevo_alto))
 
-def sonidos():
-    pygame.mixer.music.load(r"Recursos\sonidos\sonido-principal.wav")
-    pygame.mixer.music.set_volume(0.2)
-    pygame.mixer.music.play(-1)
+def reescalar_lista_imagenes(lista_imagenes, nuevo_ancho, nuevo_alto):
+    imagenes_reescaladas = []
+    for imagen in lista_imagenes:
+        imagenes_reescaladas.append(reescalar_imagen(imagen, nuevo_ancho, nuevo_alto))
+    return imagenes_reescaladas
+
+def you_win(fuente, color_letras, color_fondo, pantalla, superficie_opaca):
+    
+    tiempo_inicio = pygame.time.get_ticks()  # obtengo tiempo actual
+    
+    mensaje = fuente.render("¡GANASTE!", True, color_letras, color_fondo)
+    mitad_x = pantalla.get_width() // 2 - mensaje.get_width() // 2
+    pantalla.blit(superficie_opaca, (0,0))
+    pantalla.blit(mensaje, (mitad_x, 360))
 
 
-def pintar_lineas(pantalla, personaje, plataformas, enemigos, lista_vidas):
+    pygame.display.flip()  # actualizo la pantalla
 
-#   Lineas del personaje    
-    pygame.draw.rect(pantalla,"blue", personaje.rectangulos["main"], 2)
-    pygame.draw.rect(pantalla,"red", personaje.rectangulos["bottom"], 2)
-    pygame.draw.rect(pantalla,"red", personaje.rectangulos["top"], 2)
-    pygame.draw.rect(pantalla,"red", personaje.rectangulos["right"], 2)
-    pygame.draw.rect(pantalla,"red", personaje.rectangulos["left"], 2)
+    # con este bucle creamos una espera de 2 segundos antes de cerrar la ventana
+    while pygame.time.get_ticks() - tiempo_inicio < 3000: # (3000 milisegundos = 3 segundos)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-#   Lineas de plataformas 
-    for plataforma in plataformas:
-        pygame.draw.rect(pantalla,"pink",plataforma.rectangulos["main"], 2)
-        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["bottom"], 2)
-        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["top"], 2)
-        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["right"], 2)
-        pygame.draw.rect(pantalla,"magenta", plataforma.rectangulos["left"], 2)
+    pygame.quit()
+    sys.exit()
+
+def game_over(fuente, color_letras, color_fondo, pantalla, superficie_opaca):
+    '''
+    esta funcion recibe una fuente, algunos colores, la pantalla donde
+    se va a mostrar el "game over" y la superficie opaca es una surface
+    con 50% de opacidad, una cuestion estetica.
+    
+    esta funcion la utilizo cuando el jugador se equivoca o se queda sin tiempo
+    '''
+    
+    tiempo_inicio = pygame.time.get_ticks()  # obtengo tiempo actual
+    
+    mensaje = fuente.render("GAME OVER", True, color_letras, color_fondo)
+    pantalla.blit(superficie_opaca, (0,0))
+    pantalla.blit(mensaje, (275, 243))
         
-        
-    for enemigo in enemigos:
-        pygame.draw.rect(pantalla,"orange", enemigo.rectangulo_principal, 3)
+    pygame.display.flip() 
 
-    for tuerca in lista_vidas:
-        pygame.draw.rect(pantalla,"blue", tuerca.rectangulo, 2)
+    while pygame.time.get_ticks() - tiempo_inicio < 2000:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+    pygame.quit()
+    sys.exit()
 
 
 
 
-'''-------------------  P E R S O N A J E  P R I N C I P A L  -------------'''          
+'''------------------------------------------------------------------------
+   -------------------  P A T H S -----------------------------------------
+   ------------------------------------------------------------------------'''
+
+SONIDO_MONEDA = r"Recursos\sonidos\collectcoin.wav"
+SONIDO_VIDA = r"Recursos\sonidos\vida.wav"
+MUSICA_NIVEL_1 = r"Recursos\sonidos\sonido-principal.wav"
+MUSICA_NIVEL_2 = r"Recursos\sonidos\password-infinity-123276.wav"
+PROYECTIL_JUGADOR = r"Recursos\proyectil_jugador.png"
+PROYECTIL_ENEMIGO = r"Recursos\proyectil.png"
+ICONO_PNG = r"Recursos\icono.png"
+FUENTE_TEXTO = r"Recursos\upheaval\upheavtt.ttf"
+TUERCA_VIDA = r"Recursos\tuerca.png"
+FONDO_MOVIBLE = r"Recursos\paisaje-fondo-01.jpg"
+FONDO_NIVEL_1 = r"Recursos\plataforma_nivel1.png"
+FONDO_NIVEL_2 = r"Recursos\plataforma_nivel2.png"
+
+
+
+
+
+'''------------------------------------------------------------------------
+   -------------------  P E R S O N A J E  P R I N C I P A L  -------------
+   ------------------------------------------------------------------------''' 
+
 personaje_quieto = [pygame.image.load(r"Jugador\Idle (1).png"),
                     pygame.image.load(r"Jugador\Idle (2).png"),
                     pygame.image.load(r"Jugador\Idle (3).png"),
@@ -127,17 +234,25 @@ personaje_corre_dispara = [pygame.image.load(r"Jugador\RunShoot (1).png"),
                         pygame.image.load(r"Jugador\RunShoot (8).png"),
                         pygame.image.load(r"Jugador\RunShoot (9).png"),]
 
-
 personaje_camina_izquierda = girar_imagenes(personaje_corre, True, False)
+
 personaje_quieto_izquierda = girar_imagenes(personaje_quieto, True, False)
+
 personaje_salta_izquierda  = girar_imagenes(personaje_salta, True, False)
+
 personaje_dispara_izquierda = girar_imagenes(personaje_dispara, True, False)
+
 personaje_corre_dispara_izquierda = girar_imagenes(personaje_corre_dispara, True, False)
 
 
 
 
-'''-------------------  E N E M I G O S  ----------------------------------'''
+
+
+''' -----------------------------------------------------------------------
+----------------------  E N E M I G O S  ----------------------------------
+------------------------------------------------------------------------ '''
+
 enemigo_camina = [pygame.image.load(r"enemigo\run 1.png"),
                 pygame.image.load(r"enemigo\run 2.png"),
                 pygame.image.load(r"enemigo\run 3.png"),
@@ -161,68 +276,58 @@ enemigo_salta = [pygame.image.load(r"enemigo\jump 1.png"),
                 pygame.image.load(r"enemigo\jump 7.png"),
                 pygame.image.load(r"enemigo\jump 8.png")]
 
-
 enemigo_camina_izquierda = girar_imagenes(enemigo_camina, True, False)
+
 enemigo_quieto_izquierda = girar_imagenes(enemigo_quieto, True, False)
+
 enemigo_salta_izquierda  = girar_imagenes(enemigo_salta, True, False)
 
 
 
-def reescalar_imagen(imagen, nuevo_ancho, nuevo_alto):
-    return pygame.transform.scale(imagen, (nuevo_ancho, nuevo_alto))
 
-def reescalar_lista_imagenes(lista_imagenes, nuevo_ancho, nuevo_alto):
-    imagenes_reescaladas = []
-    for imagen in lista_imagenes:
-        imagenes_reescaladas.append(reescalar_imagen(imagen, nuevo_ancho, nuevo_alto))
-    return imagenes_reescaladas
 
-lista1_monedas = [pygame.image.load(r"monedas\1.png"),
-                pygame.image.load(r"monedas\2.png"),
-                pygame.image.load(r"monedas\3.png"),
-                pygame.image.load(r"monedas\4.png"),
-                pygame.image.load(r"monedas\5.png"),]
+''' -----------------------------------------------------------------------
+----------------------  M O N E D A S  ------------------------------------
+------------------------------------------------------------------------ '''
+
+lista1_monedas =   [pygame.image.load(r"monedas\1.png"),
+                    pygame.image.load(r"monedas\2.png"),
+                    pygame.image.load(r"monedas\3.png"),
+                    pygame.image.load(r"monedas\4.png"),
+                    pygame.image.load(r"monedas\5.png"),]
 primera_lista_monedas = reescalar_lista_imagenes(lista1_monedas, 20, 20)
 
-lista2_monedas = [pygame.image.load(r"monedas\6.png"),
-                pygame.image.load(r"monedas\7.png"),
-                pygame.image.load(r"monedas\8.png"),
-                pygame.image.load(r"monedas\9.png"),
-                pygame.image.load(r"monedas\10.png"),]
+lista2_monedas =   [pygame.image.load(r"monedas\6.png"),
+                    pygame.image.load(r"monedas\7.png"),
+                    pygame.image.load(r"monedas\8.png"),
+                    pygame.image.load(r"monedas\9.png"),
+                    pygame.image.load(r"monedas\10.png"),]
 segunda_lista_monedas = reescalar_lista_imagenes(lista2_monedas, 20, 20)
 
 
 
 
+''' -----------------------------------------------------------------------
+----------------------  P O R T A L  ------------------------------------
+------------------------------------------------------------------------ '''
+
+imagenes_portal =  [pygame.image.load(r"Recursos\portal1.png"),
+                    pygame.image.load(r"Recursos\portal2.png"),
+                    pygame.image.load(r"Recursos\portal3.png"),
+                    pygame.image.load(r"Recursos\portal4.png"),
+                    pygame.image.load(r"Recursos\portal5.png"),
+                    pygame.image.load(r"Recursos\portal6.png"),
+                    pygame.image.load(r"Recursos\portal7.png"),
+                    pygame.image.load(r"Recursos\portal8.png"),
+                    pygame.image.load(r"Recursos\portal9.png"),
+                    pygame.image.load(r"Recursos\portal10.png"),
+                    pygame.image.load(r"Recursos\portal11.png"),
+                    pygame.image.load(r"Recursos\portal12.png"),
+                    pygame.image.load(r"Recursos\portal13.png"),
+                    pygame.image.load(r"Recursos\portal14.png"),
+                    pygame.image.load(r"Recursos\portal15.png"),
+                    pygame.image.load(r"Recursos\portal16.png")]
+
+lista_imagenes_portal = reescalar_lista_imagenes(imagenes_portal, 120, 120)
 
 
-
-# class Game:
-#     def __init__(self, pantalla):
-#         self.pantalla = pantalla
-#         self.clock = pygame.time.Clock()
-#         self.FPS = 60
-#         self.player = Player()
-#         self.enemies = [Enemy() for _ in range(3)]
-
-#     def run(self):
-#         running = True
-#         while running:
-#             for event in pygame.event.get():
-#                 if event.type == pygame.QUIT:
-#                     running = False
-
-#             self.player.update()
-#             for enemy in self.enemies:
-#                 enemy.update()
-
-#             self.draw()
-#             self.clock.tick(self.FPS)
-
-#     def draw(self):
-#         self.pantalla.fill(colores.Azul_marino)
-#         # Dibuja elementos del juego, como jugador y enemigos
-#         self.player.draw(self.pantalla)
-#         for enemy in self.enemies:
-#             enemy.draw(self.pantalla)
-#         pygame.display.flip()

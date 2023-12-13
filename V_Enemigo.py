@@ -1,7 +1,6 @@
-import pygame, random
+import pygame
 from V_Configuraciones import *
 from V_Plataformas import *
-from V_Listas import *
 from V_DisparoEnemigo import *
 
 dic_enemigo = {
@@ -12,9 +11,6 @@ dic_enemigo = {
     "QuietoIzq": enemigo_quieto_izquierda,
     "SaltaIzq": enemigo_salta_izquierda }
 
-
-
-''' Heredar de personaje '''
 class Enemigo:
     def __init__(self, plataforma) -> None:
         self.animaciones = dic_enemigo
@@ -38,14 +34,14 @@ class Enemigo:
         if not self.esta_muerto:
             if self.direccion == "izquierda":
                 self.animacion_actual = self.animaciones["Izquierda"]
-                self.rectangulo_principal.x -= 5
+                self.rectangulo_principal.x -= 3
                 if self.rectangulo_principal.left < self.plataforma.left:
                     self.disparar()
                     self.rectangulo_principal.x = self.plataforma.left
                     self.direccion = "derecha"
             elif self.direccion == "derecha":
                 self.animacion_actual = self.animaciones["Derecha"]
-                self.rectangulo_principal.x += 5
+                self.rectangulo_principal.x += 3
                 if self.rectangulo_principal.right > self.plataforma.right:
                     self.disparar()
                     self.rectangulo_principal.x = self.plataforma.right - self.rectangulo_principal.width
@@ -88,12 +84,12 @@ class Enemigo:
             x = self.rectangulo_principal.centerx - 25
             y = self.rectangulo_principal.centery
         
-        nuevo_disparo = Disparo_enemigo(x, y, self.direccion, r"Recursos\proyectil.png")
-        #nuevo_disparo.sonido_disparo.play()
+        nuevo_disparo = Disparo_enemigo(x, y, self.direccion, PROYECTIL_ENEMIGO)
         self.lista_disparos.append(nuevo_disparo)
     
     def detectar_colision(self, jugador):
         lista_proyectiles = self.lista_disparos
         for proyectil in lista_proyectiles:
             if proyectil.rectangulo.colliderect(jugador.rectangulo_principal):
-                jugador.vida -= 1
+                jugador.vida -= 2
+                

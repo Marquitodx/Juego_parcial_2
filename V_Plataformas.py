@@ -15,4 +15,3 @@ class Plataforma:
         self.rectangulo.x = x
         self.rectangulo.y = y
         self.rectangulos = obtener_rectangulos(self.rectangulo)
-        self.desplazamiento_y = 5
