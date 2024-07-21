@@ -1,0 +1,16 @@
+El juego es muy basico, tenes que recolectar todas las monedas para que se abra un portal y al tocarlo "pasas de nivel".
+Si el reloj llega a 0 o te quedas sin vida perdiste.
+Tanto el personaje como toda la pantalla esta compuesta por "boxs" que son 1 rectangulo principal y otros 4 rectangulos (uno por cada lado: izquierda, derecha, arriba y abajo)
+aca esta mi primer problema que es la interaccion del personaje con los bloques.
+
+1. El principal problema es la interaccion del personaje principal con los bloques de la pantalla (al colisionar el personaje con los bloques, deberia dejar de avanzar. por el contrario, sigue avanzando y se monta en el bloque)
+
+2. Lo mismo ocurre en algunos casos cuando el personaje salta y se "engancha" la cabeza a la parte inferior de un bloque y queda haciendo movimientos raros.
+
+3. En el momento que toco el portal debe pasar de nivel o en caso de perder decir "game over" pero no puedo hacer ninguna de las dos.
+
+4. Falta crear el nivel 3 donde peleo contra el boss final
+
+5. No encuentro una mejor manera de crear un menu para el juego. Este menu lo hice en base a algunos videos de los profesores que dictaron la materia pero estan incompletos y no explican en detalle lo que hacen solo muestran como hacerlo y a mi no me quedo igual.
+
+6. algo que me falto y es muy importante es la base de datos con archivos CSV para guardar el nombre del jugador y su puntaje
